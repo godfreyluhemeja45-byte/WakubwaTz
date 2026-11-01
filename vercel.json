@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/api/proxy-video", "destination": "/api/proxy-video.js" },
+    { "source": "/api/videos", "destination": "/api/videos.js" },
+    { "source": "/api/sync", "destination": "/api/sync.js" },
+    { "source": "/(.*)", "destination": "/$1" }
+  ]
+}
