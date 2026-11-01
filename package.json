@@ -2,10 +2,9 @@
   "name": "wakubwatz",
   "version": "1.0.0",
   "description": "Website ya kisasa ya video streaming na video download nchini Tanzania",
-  "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js"
+    "start": "node local-server.js",
+    "dev": "node --watch local-server.js"
   },
   "keywords": [
     "video",
