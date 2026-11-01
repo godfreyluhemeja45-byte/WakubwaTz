@@ -1,0 +1,20 @@
+{
+  "name": "wakubwatz",
+  "version": "1.0.0",
+  "description": "Website ya kisasa ya video streaming na video download nchini Tanzania",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "video",
+    "streaming",
+    "download",
+    "tanzania",
+    "bongo",
+    "wakubwatz"
+  ],
+  "author": "WakubwaTz Team",
+  "license": "MIT"
+}

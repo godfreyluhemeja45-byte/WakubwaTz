@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>WakubwaTz - Video Streaming & Download Ya Kisasa</title>
+    <!-- Favicon & Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-dark">
+
+    <!-- Top Navigation Bar -->
+    <header class="navbar" id="navbar">
+        <div class="nav-left">
+            <button class="icon-btn mobile-menu-toggle" id="menuToggle" aria-label="Fungua Menyu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="brand-logo" id="logoBtn">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-play"></i>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-main">WAKUBWA<span class="logo-tz">TZ</span></span>
+                    <span class="logo-tagline">Burudani Bila Kikomo</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-center">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="searchInput" placeholder="Tafuta video, filamu, muziki, vichekesho..." autocomplete="off">
+                <button class="clear-search-btn" id="clearSearchBtn" style="display: none;">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="nav-right">
+            <button class="action-btn sync-btn" id="syncChimbotamuBtn" title="Sawazisha video na chimbiotamu.com" style="background: linear-gradient(135deg, #059669, #10b981); border: none; color: #fff; padding: 7px 14px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 7px; font-size: 0.85rem; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25); transition: all 0.2s ease;">
+                <i class="fa-solid fa-arrows-rotate" id="syncIcon"></i>
+                <span>Sync ChimboTamu</span>
+            </button>
+            <button class="action-btn upload-btn" id="openUploadBtn" title="Weka Video Mpya">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <span>Weka Video</span>
+            </button>
+            <button class="icon-btn downloads-trigger-btn" id="openDownloadsManagerBtn" title="Faili Zilizopakuliwa">
+                <i class="fa-solid fa-circle-down"></i>
+                <span class="badge" id="downloadCountBadge" style="display: none;">0</span>
+            </button>
+            <button class="icon-btn favorites-trigger-btn" id="openWatchlistBtn" title="Orodha Yangu">
+                <i class="fa-solid fa-heart"></i>
+                <span class="badge" id="favCountBadge" style="display: none;">0</span>
+            </button>
+            <div class="user-profile-badge" id="userProfileBtn" title="Akaunti Yangu & Hadhi ya VIP" style="cursor: pointer; position: relative;">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Avatar" class="avatar-img">
+                <span class="status-dot"></span>
+                <div class="profile-dropdown" id="profileDropdown" style="display: none; position: absolute; top: calc(100% + 10px); right: 0; width: 260px; background: #11141e; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; box-shadow: 0 16px 40px rgba(0,0,0,0.85); padding: 16px; z-index: 1000; text-align: left;">
+                    <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px; margin-bottom: 12px;">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover;">
+                        <div>
+                            <h4 style="margin: 0; font-size: 0.95rem; color: #fff;">Mtumiaji Rasmi</h4>
+                            <span style="font-size: 0.75rem; color: #10b981; font-weight: 700; display: flex; align-items: center; gap: 4px;"><i class="fa-solid fa-crown" style="color: #fbbf24;"></i> WAKUBWATZ VIP PRO</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem;">
+                        <div style="display: flex; justify-content: space-between; color: #94a3b8;">
+                            <span>Vipendwa:</span>
+                            <strong id="profFavCount" style="color: #fff;">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; color: #94a3b8;">
+                            <span>Historia:</span>
+                            <strong id="profHistCount" style="color: #fff;">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; color: #94a3b8;">
+                            <span>Zilizopakuliwa:</span>
+                            <strong id="profDlCount" style="color: #fff;">0</strong>
+                        </div>
+                    </div>
+                    <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 6px;">
+                        <button id="profSyncBtn" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981; padding: 7px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; text-align: center;"><i class="fa-solid fa-arrows-rotate"></i> Sawazisha Video Mpya</button>
+                        <button id="profClearCacheBtn" style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; padding: 7px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; text-align: center;"><i class="fa-solid fa-trash-can"></i> Futa Cache ya Local</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-section">
+                <span class="section-title">MENYU KUU</span>
+                <ul class="nav-links">
+                    <li class="active" data-view="home">
+                        <a href="javascript:void(0)"><i class="fa-solid fa-house"></i> <span>Mwanzo (Home)</span></a>
+                    </li>
+                    <li data-view="trending">
+                        <a href="javascript:void(0)"><i class="fa-solid fa-fire"></i> <span>Zinazovuma (Trending)</span></a>
+                    </li>
+                    <li data-view="latest">
+                        <a href="javascript:void(0)"><i class="fa-solid fa-clock"></i> <span>Mpya Kabisa</span></a>
+                    </li>
+                    <li data-view="watchlist">
+                        <a href="javascript:void(0)"><i class="fa-solid fa-bookmark"></i> <span>Orodha Yangu</span></a>
+                    </li>
+                    <li data-view="history">
+                        <a href="javascript:void(0)"><i class="fa-solid fa-clock-rotate-left"></i> <span>Historia</span></a>
+                    </li>
+                    <li data-view="downloads">
+                        <a href="javascript:void(0)"><i class="fa-solid fa-circle-down"></i> <span>Zilizopakuliwa</span></a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <span class="section-title">AINA YA VIDEO</span>
+                <ul class="category-links">
+                    <li data-category="all" class="cat-pill active"><i class="fa-solid fa-shapes"></i> Zote</li>
+                    <li data-category="bongo" class="cat-pill"><i class="fa-solid fa-fire"></i> Bongo Videos</li>
+                    <li data-category="connection" class="cat-pill"><i class="fa-solid fa-bolt"></i> Connection</li>
+                    <li data-category="filamu" class="cat-pill"><i class="fa-solid fa-film"></i> Filamu & Movies</li>
+                    <li data-category="muziki" class="cat-pill"><i class="fa-solid fa-music"></i> Muziki (Hits)</li>
+                    <li data-category="vichekesho" class="cat-pill"><i class="fa-solid fa-face-laugh-squint"></i> Vichekesho</li>
+                    <li data-category="michezo" class="cat-pill"><i class="fa-solid fa-futbol"></i> Michezo (Sports)</li>
+                    <li data-category="habari" class="cat-pill"><i class="fa-solid fa-bullhorn"></i> Habari & Matukio</li>
+                    <li data-category="podcasts" class="cat-pill"><i class="fa-solid fa-microphone-lines"></i> Podcasts</li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section vip-promo">
+                <div class="vip-card">
+                    <div class="vip-tag"><i class="fa-solid fa-crown"></i> WAKUBWATZ PRO</div>
+                    <p>Streaming ya kasi ya juu na upakuaji usio na kikomo katika 4K Ultra HD.</p>
+                    <button class="vip-btn" id="vipBtn">Jiunge Bure Sasa</button>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <p>&copy; 2026 WakubwaTz. Haki zote zimehifadhiwa.</p>
+                <div class="lang-switch">
+                    <span>Lugha: <strong>Kiswahili</strong></span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content" id="mainContent">
+
+            <!-- Category Pills Bar (Horizontal Scroll for Quick Access) -->
+            <div class="quick-categories-bar" id="quickCategoriesBar">
+                <button class="quick-pill active" data-cat="all">Zote (All)</button>
+                <button class="quick-pill" data-cat="bongo">🔥 Bongo Videos</button>
+                <button class="quick-pill" data-cat="connection">⚡ Connection</button>
+                <button class="quick-pill" data-cat="filamu">🎬 Filamu & Movies</button>
+                <button class="quick-pill" data-cat="muziki">🎵 Muziki & Hits</button>
+                <button class="quick-pill" data-cat="vichekesho">😂 Vichekesho</button>
+                <button class="quick-pill" data-cat="michezo">⚽ Michezo</button>
+                <button class="quick-pill" data-cat="habari">📰 Habari</button>
+                <button class="quick-pill" data-cat="podcasts">🎙️ Podcasts</button>
+            </div>
+
+            <!-- Spotlight / Featured Hero Banner -->
+            <section class="hero-spotlight" id="heroSpotlight">
+                <div class="hero-overlay"></div>
+                <div class="hero-backdrop" id="heroBackdrop"></div>
+                <div class="hero-content">
+                    <div class="hero-badges">
+                        <span class="badge-trending"><i class="fa-solid fa-fire"></i> #1 KINACHOVUMA TANZANIA</span>
+                        <span class="badge-quality">4K ULTRA HD</span>
+                        <span class="badge-duration" id="heroDuration">12:45 Min</span>
+                    </div>
+                    <h1 class="hero-title" id="heroTitle">Mfalme Wa Bongo Flava: Usiku Wa Burudani Dar</h1>
+                    <p class="hero-desc" id="heroDesc">
+                        Tazama onesho kubwa la kihistoria lililokusanya maelfu ya mashabiki Dar es Salaam. Burudani ya kiwango cha juu, video ya ubora wa 4K na sauti ya Dolby Atmos.
+                    </p>
+                    <div class="hero-actions">
+                        <button class="hero-btn play-btn" id="heroPlayBtn">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Tazama Sasa</span>
+                        </button>
+                        <button class="hero-btn download-btn" id="heroDownloadBtn">
+                            <i class="fa-solid fa-cloud-arrow-down"></i>
+                            <span>Pakua Video</span>
+                        </button>
+                        <button class="hero-btn fav-btn" id="heroFavBtn" title="Ongeza kwenye orodha">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Video Section: Trending Now -->
+            <section class="video-section" id="trendingSection">
+                <div class="section-header">
+                    <div class="header-left">
+                        <i class="fa-solid fa-fire-flame-curved section-icon"></i>
+                        <h2>Video Zinazovuma Zaidi Leo</h2>
+                        <span class="badge-count" id="trendingCount">8 Video</span>
+                    </div>
+                    <button class="view-all-btn" data-filter="trending">Tazama Zote <i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <div class="video-grid" id="trendingGrid">
+                    <!-- Dynamic Video Cards Inserted Here -->
+                </div>
+            </section>
+
+            <!-- Video Section: Main Grid (Explore / Feed) -->
+            <section class="video-section" id="feedSection">
+                <div class="section-header">
+                    <div class="header-left">
+                        <i class="fa-solid fa-compact-disc section-icon"></i>
+                        <h2 id="currentCategoryTitle">Video Zote Zinazopatikana</h2>
+                        <span class="badge-count" id="feedCount">16 Video</span>
+                    </div>
+                    <div class="header-filters">
+                        <select id="sortSelect" class="custom-select">
+                            <option value="popular">Zilizopendwa Zaidi</option>
+                            <option value="newest">Mpya Zaidi</option>
+                            <option value="views">Zilizotazamwa Zaidi</option>
+                            <option value="duration">Muda Mrefu</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="video-grid" id="mainVideoGrid">
+                    <!-- Dynamic Video Cards Inserted Here -->
+                </div>
+            </section>
+
+            <!-- Empty Search / Filter State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <i class="fa-solid fa-film-slash empty-icon"></i>
+                <h3>Hakuna Video Zilizopatikana</h3>
+                <p>Jaribu kubadilisha jina unalotafuta au angalia aina nyingine za video.</p>
+                <button class="action-btn" id="resetSearchBtn">Rejea Video Zote</button>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- MODERN THEATER VIDEO PLAYER MODAL -->
+    <div class="video-modal-backdrop" id="videoModalBackdrop">
+        <div class="video-modal-container" id="videoModalContainer">
+            
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <div class="modal-title-box">
+                    <span class="modal-badge"><i class="fa-solid fa-circle-dot live-pulse"></i> INAYOCHEZA SASA</span>
+                    <h3 id="playerVideoTitle">Jina la Video</h3>
+                </div>
+                <div class="modal-header-actions">
+                    <button class="modal-action-btn mode-switch-btn" id="togglePlayerModeBtn" title="Badili mtindo wa kicheza video (Fast Stream / Custom HTML5)" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #10b981; border-radius: 6px; padding: 6px 12px; font-size: 0.82rem; cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 600;">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span id="playerModeLabel">Fast Stream</span>
+                    </button>
+                    <button class="modal-action-btn download-direct-btn" id="modalDownloadBtn" title="Pakua Video Hii">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Pakua</span>
+                    </button>
+                    <button class="modal-action-btn share-btn" id="modalShareBtn" title="Sambaza Video">
+                        <i class="fa-solid fa-share-nodes"></i>
+                        <span>Shiriki</span>
+                    </button>
+                    <button class="modal-close-btn" id="closePlayerModalBtn" title="Funga Kichezaji">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Custom Video Player Wrapper -->
+            <div class="player-wrapper" id="playerWrapper">
+                <!-- Fast Direct Stream Iframe (Zero Delay / No Endless Buffering) -->
+                <div class="embed-stream-container" id="embedStreamContainer" style="width: 100%; height: 100%; position: absolute; inset: 0; z-index: 5; background: #000; display: block;">
+                    <iframe id="mainEmbedIframe" referrerpolicy="no-referrer" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen="true" style="width: 100%; height: 100%; border: none; display: block;"></iframe>
+                </div>
+
+                <video id="mainVideoPlayer" preload="auto" playsinline controls referrerpolicy="no-referrer" style="display: none; width: 100%; height: 100%; object-fit: contain;">
+                    <source src="" type="video/mp4" id="videoSource">
+                    Kivinjari chako hakiauni kicheza video hiki cha HTML5.
+                </video>
+
+                <!-- Buffering / Loading Spinner -->
+                <div class="player-loader" id="playerLoader">
+                    <div class="spinner"></div>
+                    <span>Inapakia Streaming...</span>
+                </div>
+
+                <!-- Big Center Play Button Overlay -->
+                <div class="player-big-play" id="bigPlayBtn">
+                    <i class="fa-solid fa-play"></i>
+                </div>
+
+                <!-- Custom Player Controls Bar -->
+                <div class="custom-controls" id="customControls">
+                    
+                    <!-- Progress / Scrub Bar -->
+                    <div class="progress-container" id="progressContainer">
+                        <div class="buffer-bar" id="bufferBar"></div>
+                        <div class="progress-bar" id="progressBar"></div>
+                        <div class="progress-handle" id="progressHandle"></div>
+                        <div class="time-tooltip" id="timeTooltip">00:00</div>
+                    </div>
+
+                    <div class="controls-row">
+                        <div class="controls-left">
+                            <button class="control-btn" id="playPauseBtn" title="Play / Pause (Nafasi)">
+                                <i class="fa-solid fa-play"></i>
+                            </button>
+                            <button class="control-btn" id="rewindBtn" title="Rudi Nyuma sekunde 10">
+                                <i class="fa-solid fa-rotate-left"></i>
+                                <span class="rewind-label">10s</span>
+                            </button>
+                            <button class="control-btn" id="forwardBtn" title="Songa Mbele sekunde 10">
+                                <i class="fa-solid fa-rotate-right"></i>
+                                <span class="rewind-label">10s</span>
+                            </button>
+
+                            <!-- Volume Control -->
+                            <div class="volume-container">
+                                <button class="control-btn" id="volumeBtn" title="Sauti">
+                                    <i class="fa-solid fa-volume-high"></i>
+                                </button>
+                                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="1">
+                            </div>
+
+                            <!-- Duration Display -->
+                            <div class="time-display">
+                                <span id="currentTime">00:00</span>
+                                <span class="time-separator">/</span>
+                                <span id="totalDuration">00:00</span>
+                            </div>
+                        </div>
+
+                        <div class="controls-right">
+                            <!-- Playback Speed -->
+                            <div class="dropdown-control">
+                                <button class="control-btn text-btn" id="speedBtn" title="Kasi ya Video">1.0x</button>
+                                <div class="dropdown-menu" id="speedMenu">
+                                    <div class="menu-item" data-speed="0.5">0.5x Polepole</div>
+                                    <div class="menu-item" data-speed="0.75">0.75x</div>
+                                    <div class="menu-item active" data-speed="1.0">1.0x Kawaida</div>
+                                    <div class="menu-item" data-speed="1.25">1.25x Haraka</div>
+                                    <div class="menu-item" data-speed="1.5">1.5x Kasi</div>
+                                    <div class="menu-item" data-speed="2.0">2.0x Kasi Zaidi</div>
+                                </div>
+                            </div>
+
+                            <!-- Quality Selector -->
+                            <div class="dropdown-control">
+                                <button class="control-btn text-btn" id="qualityBtn" title="Ubora wa Video">
+                                    <i class="fa-solid fa-gear"></i>
+                                    <span id="qualityLabel">1080p</span>
+                                </button>
+                                <div class="dropdown-menu" id="qualityMenu">
+                                    <div class="menu-item" data-res="4k">4K Ultra HD <span class="badge-mini">PRO</span></div>
+                                    <div class="menu-item active" data-res="1080p">1080p Full HD</div>
+                                    <div class="menu-item" data-res="720p">720p HD</div>
+                                    <div class="menu-item" data-res="480p">480p SD</div>
+                                    <div class="menu-item" data-res="360p">360p Data Saver</div>
+                                </div>
+                            </div>
+
+                            <!-- Picture-in-Picture -->
+                            <button class="control-btn" id="pipBtn" title="Tazama Dirisha Dogo (PiP)">
+                                <i class="fa-solid fa-images"></i>
+                            </button>
+
+                            <!-- Theater Mode -->
+                            <button class="control-btn" id="theaterBtn" title="Mfumo wa Sinema (Theater)">
+                                <i class="fa-solid fa-expand"></i>
+                            </button>
+
+                            <!-- Fullscreen -->
+                            <button class="control-btn" id="fullscreenBtn" title="Skrini Nzima (Fullscreen)">
+                                <i class="fa-solid fa-maximize"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Video Details & Interaction Bar Below Player -->
+            <div class="player-details-grid">
+                <div class="player-meta-main">
+                    <h2 class="video-full-title" id="metaVideoTitle">Kichwa cha Video</h2>
+                    
+                    <div class="video-stats-bar">
+                        <div class="stats-left">
+                            <span class="stat-item"><i class="fa-solid fa-eye"></i> <span id="metaViews">154.2K</span> Wametazama</span>
+                            <span class="stat-bullet">•</span>
+                            <span class="stat-item"><i class="fa-regular fa-clock"></i> <span id="metaTimeAgo">Masaa 2 yaliyopita</span></span>
+                            <span class="stat-bullet">•</span>
+                            <span class="stat-item category-badge" id="metaCategory">Bongo Flava</span>
+                        </div>
+
+                        <div class="stats-actions">
+                            <button class="stat-action-btn" id="likeBtn">
+                                <i class="fa-regular fa-thumbs-up"></i>
+                                <span id="likeCount">12.4K</span>
+                            </button>
+                            <button class="stat-action-btn" id="dislikeBtn">
+                                <i class="fa-regular fa-thumbs-down"></i>
+                                <span>Hapana</span>
+                            </button>
+                            <button class="stat-action-btn" id="actionDownloadBtn">
+                                <i class="fa-solid fa-cloud-arrow-down"></i>
+                                <span>Pakua (Download)</span>
+                            </button>
+                            <button class="stat-action-btn" id="actionFavBtn">
+                                <i class="fa-regular fa-heart"></i>
+                                <span>Hifadhi</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Channel / Creator Info -->
+                    <div class="creator-card">
+                        <div class="creator-left">
+                            <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=120&q=80" alt="Muumbaji" class="creator-avatar" id="metaCreatorAvatar">
+                            <div class="creator-info">
+                                <div class="creator-name-wrap">
+                                    <h4 id="metaCreatorName">WakubwaTz Studio</h4>
+                                    <i class="fa-solid fa-circle-check verified-icon"></i>
+                                </div>
+                                <span class="creator-subs" id="metaCreatorSubs">845,000 Wafuatiliaji</span>
+                            </div>
+                        </div>
+                        <button class="subscribe-btn" id="subBtn">
+                            <i class="fa-solid fa-bell"></i>
+                            <span>Fuatilia</span>
+                        </button>
+                    </div>
+
+                    <!-- Video Description Box -->
+                    <div class="video-description-box" id="videoDescriptionBox">
+                        <p id="metaDescription">
+                            Maelezo ya video yatatokea hapa. Karibu WakubwaTz kwa video zote kali na za kisasa.
+                        </p>
+                        <div class="video-tags" id="metaTags">
+                            <span class="tag">#WakubwaTz</span>
+                            <span class="tag">#Tanzania</span>
+                            <span class="tag">#Trending</span>
+                        </div>
+                    </div>
+
+                    <!-- Comments Section -->
+                    <div class="comments-section">
+                        <div class="comments-header">
+                            <h3><i class="fa-regular fa-comments"></i> Maoni (<span id="commentsCount">3</span>)</h3>
+                        </div>
+
+                        <!-- Add Comment Form -->
+                        <div class="add-comment-box">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Wewe" class="comment-user-avatar">
+                            <div class="comment-input-wrap">
+                                <input type="text" id="newCommentInput" placeholder="Andika maoni yako hapa kuhusu video hii...">
+                                <button class="send-comment-btn" id="postCommentBtn">
+                                    <i class="fa-solid fa-paper-plane"></i> Tuma
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Comments List -->
+                        <div class="comments-list" id="commentsList">
+                            <!-- Comments dynamic -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Related Videos Sidebar -->
+                <div class="related-videos-column">
+                    <h3 class="related-title">Video Zinazofanana</h3>
+                    <div class="related-videos-list" id="relatedVideosList">
+                        <!-- Related video cards -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- DOWNLOAD OPTIONS MODAL -->
+    <div class="sub-modal-backdrop" id="downloadModal">
+        <div class="sub-modal-card">
+            <div class="sub-modal-header">
+                <div class="modal-sub-title">
+                    <i class="fa-solid fa-cloud-arrow-down modal-ico"></i>
+                    <div>
+                        <h3>Chagua Ubora wa Kupakua (Download)</h3>
+                        <p id="downloadVideoTitle">Jina la Video</p>
+                    </div>
+                </div>
+                <button class="close-sub-modal" id="closeDownloadModalBtn">&times;</button>
+            </div>
+            
+            <div class="download-formats-list">
+                <!-- 1080p option -->
+                <div class="format-card" data-quality="1080p" data-size="142 MB">
+                    <div class="format-info">
+                        <span class="format-res">1080p Full HD</span>
+                        <span class="format-detail">MP4 • Picha safi zaidi • Audio Dolby 320kbps</span>
+                    </div>
+                    <div class="format-actions">
+                        <span class="format-size">~142 MB</span>
+                        <button class="btn-download-start"><i class="fa-solid fa-download"></i> Pakua</button>
+                    </div>
+                </div>
+
+                <!-- 720p option -->
+                <div class="format-card recommended" data-quality="720p" data-size="68 MB">
+                    <span class="badge-rec">INAYOPENDEKEZWA</span>
+                    <div class="format-info">
+                        <span class="format-res">720p High Definition (HD)</span>
+                        <span class="format-detail">MP4 • Inafaa kwa simu zote na kompyuta</span>
+                    </div>
+                    <div class="format-actions">
+                        <span class="format-size">~68 MB</span>
+                        <button class="btn-download-start"><i class="fa-solid fa-download"></i> Pakua</button>
+                    </div>
+                </div>
+
+                <!-- 480p option -->
+                <div class="format-card" data-quality="480p" data-size="32 MB">
+                    <div class="format-info">
+                        <span class="format-res">480p Standard (SD)</span>
+                        <span class="format-detail">MP4 • Haraka & Inabana bando</span>
+                    </div>
+                    <div class="format-actions">
+                        <span class="format-size">~32 MB</span>
+                        <button class="btn-download-start"><i class="fa-solid fa-download"></i> Pakua</button>
+                    </div>
+                </div>
+
+                <!-- MP3 Audio option -->
+                <div class="format-card" data-quality="mp3" data-size="8.4 MB">
+                    <div class="format-info">
+                        <span class="format-res"><i class="fa-solid fa-music"></i> MP3 Sauti Tu (Audio)</span>
+                        <span class="format-detail">Sauti safi kabisa ya 320kbps kwa muziki</span>
+                    </div>
+                    <div class="format-actions">
+                        <span class="format-size">~8.4 MB</span>
+                        <button class="btn-download-start"><i class="fa-solid fa-download"></i> Pakua Sauti</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Download Status Feedback in Modal -->
+            <div class="download-progress-box" id="downloadProgressBox" style="display: none;">
+                <div class="progress-info-row">
+                    <span id="dlStatusText">Inapakua faili...</span>
+                    <span id="dlPercentText">0%</span>
+                </div>
+                <div class="dl-bar-wrap">
+                    <div class="dl-bar-fill" id="dlBarFill"></div>
+                </div>
+                <p class="dl-tip"><i class="fa-solid fa-circle-check"></i> Faili litahifadhiwa kwenye folda ya 'Downloads' katika kifaa chako.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- DOWNLOAD MANAGER DRAWER -->
+    <div class="drawer-backdrop" id="downloadsDrawerBackdrop">
+        <div class="drawer-panel" id="downloadsDrawer">
+            <div class="drawer-header">
+                <h3><i class="fa-solid fa-circle-down"></i> Faili Ulizopakua (<span id="drawerDlCount">0</span>)</h3>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <button id="clearDownloadsBtn" title="Futa Orodha ya Kupakua" style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.25); color: #f87171; font-size: 0.78rem; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-weight: 600;">Futa Yote</button>
+                    <button class="close-drawer-btn" id="closeDownloadsDrawer">&times;</button>
+                </div>
+            </div>
+            <div class="drawer-content" id="downloadsDrawerList">
+                <div class="drawer-empty">
+                    <i class="fa-solid fa-cloud-arrow-down"></i>
+                    <p>Bado haujapakua video yoyote.</p>
+                    <span>Bofya kitufe cha 'Pakua' kwenye video yoyote kuanza upakuaji wa kasi.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- UPLOAD VIDEO MODAL -->
+    <div class="sub-modal-backdrop" id="uploadModal">
+        <div class="sub-modal-card upload-card">
+            <div class="sub-modal-header">
+                <div class="modal-sub-title">
+                    <i class="fa-solid fa-cloud-arrow-up modal-ico"></i>
+                    <div>
+                        <h3>Weka Video Mpya Kwenye WakubwaTz</h3>
+                        <p>Shiriki video yako na mamilioni ya watumiaji</p>
+                    </div>
+                </div>
+                <button class="close-sub-modal" id="closeUploadModalBtn">&times;</button>
+            </div>
+
+            <form id="uploadVideoForm" class="upload-form">
+                <div class="form-group">
+                    <label for="newVideoTitle">Kichwa cha Video (Title) *</label>
+                    <input type="text" id="newVideoTitle" placeholder="Mfano: Diamond Platnumz - Live Show 2026" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="newVideoCategory">Aina ya Video (Category) *</label>
+                        <select id="newVideoCategory" required>
+                            <option value="muziki">Muziki (Hits)</option>
+                            <option value="filamu">Filamu & Series</option>
+                            <option value="vichekesho">Vichekesho</option>
+                            <option value="michezo">Michezo & Soka</option>
+                            <option value="habari">Habari & Matukio</option>
+                            <option value="podcasts">Podcasts</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="newVideoDuration">Muda wa Video (Mfano: 04:30)</label>
+                        <input type="text" id="newVideoDuration" placeholder="05:12" value="04:20">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="newVideoUrl">Link ya Video (Direct MP4 URL au WebM) *</label>
+                    <input type="url" id="newVideoUrl" placeholder="https://domain.com/video.mp4" value="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" required>
+                    <small>Au unaweza kuchagua faili kutoka kwenye kompyuta yako hapa chini:</small>
+                    <input type="file" id="localVideoFile" accept="video/mp4,video/webm,video/ogg" class="file-input-field">
+                </div>
+
+                <div class="form-group">
+                    <label for="newVideoThumb">Picha ya Video (Thumbnail URL)</label>
+                    <input type="url" id="newVideoThumb" placeholder="https://images.unsplash.com/photo-..." value="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80">
+                </div>
+
+                <div class="form-group">
+                    <label for="newVideoDesc">Maelezo Mafupi (Description)</label>
+                    <textarea id="newVideoDesc" rows="3" placeholder="Eleza kwa ufupi video hii inahusu nini..."></textarea>
+                </div>
+
+                <div class="upload-btn-row">
+                    <button type="button" class="btn-secondary" id="cancelUploadBtn">Ghairi</button>
+                    <button type="submit" class="action-btn"><i class="fa-solid fa-plus"></i> Chapisha Video Sasa</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SHARE MODAL -->
+    <div class="sub-modal-backdrop" id="shareModal">
+        <div class="sub-modal-card share-card">
+            <div class="sub-modal-header">
+                <h3>Shiriki Video Hii</h3>
+                <button class="close-sub-modal" id="closeShareModalBtn">&times;</button>
+            </div>
+            <div class="share-options-grid">
+                <a href="#" class="share-tile whatsapp" id="shareWhatsapp" target="_blank">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <span>WhatsApp</span>
+                </a>
+                <a href="#" class="share-tile telegram" id="shareTelegram" target="_blank">
+                    <i class="fa-brands fa-telegram"></i>
+                    <span>Telegram</span>
+                </a>
+                <a href="#" class="share-tile facebook" id="shareFacebook" target="_blank">
+                    <i class="fa-brands fa-facebook-f"></i>
+                    <span>Facebook</span>
+                </a>
+                <a href="#" class="share-tile twitter" id="shareTwitter" target="_blank">
+                    <i class="fa-brands fa-x-twitter"></i>
+                    <span>X (Twitter)</span>
+                </a>
+            </div>
+            <div class="copy-link-wrap">
+                <input type="text" id="shareUrlInput" readonly value="https://wakubwatz.com/watch?v=123">
+                <button class="copy-link-btn" id="copyLinkBtn"><i class="fa-solid fa-copy"></i> Nakili</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
